@@ -36,10 +36,69 @@ form.addEventListener("submit", function (event) {
       form.reset();
     });
 
-    // function to add it 
+    // function to add/delete a post  
+function addPost(title, content) {
+    // save post in the array (newest goes first)
+    post.unshift({ title: title, content: content });
     
-    
+    };
+    savePosts();
+    renderPosts();
 
+
+
+function deletePost(id) {
+    posts = posts.filter(function (item) {
+        return item.id !== id;
+    });
+    savePosts();
+    renderPosts();
+}
+    //drawing list
+function renderPosts() {
+    // clear what's currently shown, but keep the empty message element
+    postList.querySelectorAll(".post").forEach(el => el.remove());
+
+    // show "No posts yet." only when the array is empty
+    emptyMsg.style.display = post.length === 0 ? "block" : "none";
+
+    post.forEach(function (item) {
+        const article = document.createElement("article");
+        article.className = "post";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = item.title;
+
+        const p = document.createElement("p");
+        p.textContent = item.content;
+
+        article.append(h3, p);
+        postList.appendChild(article);
+    });
+}
+
+// local storage
+function savePosts() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    } catch (err) {
+        console.error("Could not save posts:", err);
+    }
+}
+
+function loadPosts() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        posts = saved ? JSON.parse(saved) : [];
+    } catch (error) {
+        console.error("Could not load posts:", err);
+        posts = [];
+    }
+}
+
+//loading the pages
+loadPosts();
+renderPosts();
 
 
 
