@@ -1,6 +1,6 @@
 let posts = [];
 const STORAGE_KEY = "blog-posts";
-let editingId = null;
+let editingId = null; //left open for edits
 
 const form = document.getElementById("post-form");
 const titleInput = document.getElementById("post-title");
@@ -9,6 +9,7 @@ const titleError = document.getElementById("title-error");
 const contentError = document.getElementById("content-error");
 const postList = document.getElementById("post-list");
 const emptyMsg = document.getElementById("empty-msg");
+const submitBtn = document.getElementById("submit-btn");
 
 //sumbitting a post
 form.addEventListener("submit", function (event) {
@@ -33,9 +34,14 @@ form.addEventListener("submit", function (event) {
     }
     if (!valid) return;
 
-    
-    addPost(title, content);
+    //edits
+     if (editingId === null) {
+        addPost(title, content);
+    } else {
+        updatePost(editingId, title, content);
+    }
     form.reset();
+
 });
 
 // function to add/delete a post / save post in the array (newest goes first)
@@ -48,6 +54,12 @@ function addPost(title, content) {
 
 
 function deletePosts(id) {
+    if (editingId === id) {
+        editingId = null;
+        submitBtn.textContent = "Submit";
+        form.reset();
+    }
+
     posts = posts.filter(function (item) {
         return item.id !== id;
     });
@@ -55,7 +67,7 @@ function deletePosts(id) {
     renderPosts();
 }
 
-//make edits
+//make edits on posts
 function makeEdit(id) {
     const postEdit = posts.find(function (item) {
         return item.id === id;
@@ -69,14 +81,26 @@ function makeEdit(id) {
 }
 
 //making the update
+function updatePost( id, title, content) {
+    posts.forEach(function (item) {
+        if (item.id === id) {
+            item.title = title;
+            item.content = content;
+        }
+    });
 
+    editingId = null;
+    submitBtn.textContent = "Submit";
+    savePosts();
+    renderPosts();
+}
 
 
 //drawing list
 
 function renderPosts() {
     // clear what's currently shown, but keep the empty message element
-    postList.querySelectorAll(".post").forEach(function (el) { el.remove()});
+    postList.querySelectorAll(".post").forEach(function (el) { el.remove() });
 
     // show "No posts yet." only when the array is empty
     emptyMsg.style.display = posts.length === 0 ? "block" : "none";
