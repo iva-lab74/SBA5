@@ -1,5 +1,6 @@
 let posts = [];
 const STORAGE_KEY = "blog-posts";
+let editingId = null;
 
 const form = document.getElementById("post-form");
 const titleInput = document.getElementById("post-title");
@@ -54,6 +55,23 @@ function deletePosts(id) {
     renderPosts();
 }
 
+//make edits
+function makeEdit(id) {
+    const postEdit = posts.find(function (item) {
+        return item.id === id;
+    });
+    if (!postEdit) return;
+
+    editingId = id;
+    titleInput.value = postEdit.title;
+    contentInput.value = postEdit.content;
+    submitBtn.textContent = "Update"
+}
+
+//making the update
+
+
+
 //drawing list
 
 function renderPosts() {
@@ -73,13 +91,19 @@ function renderPosts() {
         const p = document.createElement("p");
         p.textContent = item.content;
 
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.addEventListener("click", function () {
+            makeEdit(item.id);
+        });
+
         const delBtn = document.createElement("button");
         delBtn.textContent = "Delete";
         delBtn.addEventListener("click", function () {
             deletePosts(item.id);
         });
 
-        article.append(h3, p, delBtn);
+        article.append(h3, p, delBtn, editBtn);
         postList.appendChild(article);
     });
 }
