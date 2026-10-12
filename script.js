@@ -1,4 +1,5 @@
-let post = [];
+let posts = [];
+const STORAGE_KEY = "blog-posts";
 
 const form = document.getElementById("post-form");
 const titleInput = document.getElementById("post-title");
@@ -8,7 +9,7 @@ const contentError = document.getElementById("content-error");
 const postList = document.getElementById("post-list");
 const emptyMsg = document.getElementById("empty-msg");
 
-    //sumbitting a post
+//sumbitting a post
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -24,37 +25,40 @@ form.addEventListener("submit", function (event) {
     if (title === "") {
         titleError.textContent = "Title is required.";
         valid = false;
-      }
-      if (content === "") {
+    }
+    if (content === "") {
         contentError.textContent = "Content is required.";
         valid = false;
-      }
-      if (!valid) return;
+    }
+    if (!valid) return;
 
     //adding the post and then the for reset to blank 
-      addPost(title, content);
-      form.reset();
-    });
+    addPost(title, content);
+    form.reset();
+});
 
-    // function to add/delete a post  
+// function to add/delete a post  
+
 function addPost(title, content) {
     // save post in the array (newest goes first)
     post.unshift({ title: title, content: content });
-    
-    };
+
+
     savePosts();
     renderPosts();
+};
 
 
-
-function deletePost(id) {
+function deletePosts(id) {
     posts = posts.filter(function (item) {
         return item.id !== id;
     });
     savePosts();
     renderPosts();
 }
-    //drawing list
+
+//drawing list
+
 function renderPosts() {
     // clear what's currently shown, but keep the empty message element
     postList.querySelectorAll(".post").forEach(el => el.remove());
@@ -62,7 +66,7 @@ function renderPosts() {
     // show "No posts yet." only when the array is empty
     emptyMsg.style.display = post.length === 0 ? "block" : "none";
 
-    post.forEach(function (item) {
+    posts.forEach(function (item) {
         const article = document.createElement("article");
         article.className = "post";
 
@@ -71,6 +75,8 @@ function renderPosts() {
 
         const p = document.createElement("p");
         p.textContent = item.content;
+
+
 
         article.append(h3, p);
         postList.appendChild(article);
@@ -91,7 +97,7 @@ function loadPosts() {
         const saved = localStorage.getItem(STORAGE_KEY);
         posts = saved ? JSON.parse(saved) : [];
     } catch (error) {
-        console.error("Could not load posts:", err);
+        console.error("Could not load posts:", error);
         posts = [];
     }
 }
