@@ -17,7 +17,7 @@ form.addEventListener("submit", function (event) {
     const content = contentInput.value.trim();
     let valid = true;
 
-    //goes back to blank
+
     titleError.textContent = "";
     contentError.textContent = "";
 
@@ -32,21 +32,18 @@ form.addEventListener("submit", function (event) {
     }
     if (!valid) return;
 
-    //adding the post and then the for reset to blank 
+    
     addPost(title, content);
     form.reset();
 });
 
-// function to add/delete a post  
+// function to add/delete a post / save post in the array (newest goes first)
 
 function addPost(title, content) {
-    // save post in the array (newest goes first)
-    post.unshift({ title: title, content: content });
-
-
+    post.unshift({ id: Date.now(), title: title, content: content });
     savePosts();
     renderPosts();
-};
+}
 
 
 function deletePosts(id) {
@@ -61,7 +58,7 @@ function deletePosts(id) {
 
 function renderPosts() {
     // clear what's currently shown, but keep the empty message element
-    postList.querySelectorAll(".post").forEach(el => el.remove());
+    postList.querySelectorAll(".post").forEach(function (el) { el.remove()});
 
     // show "No posts yet." only when the array is empty
     emptyMsg.style.display = post.length === 0 ? "block" : "none";
@@ -76,9 +73,13 @@ function renderPosts() {
         const p = document.createElement("p");
         p.textContent = item.content;
 
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.addEventListener("click", function () {
+            deletePosts(item.id);
+        });
 
-
-        article.append(h3, p);
+        article.append(h3, p, delBtn);
         postList.appendChild(article);
     });
 }
@@ -87,8 +88,8 @@ function renderPosts() {
 function savePosts() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-    } catch (err) {
-        console.error("Could not save posts:", err);
+    } catch (error) {
+        console.error("Could not save posts:", error);
     }
 }
 
