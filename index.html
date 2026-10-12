@@ -2,23 +2,23 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Personal Blog Platform</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Personal Blog Platform</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 
 <body>
 
   <div class="container">
     <h1>Posts</h1>
-    
+
 
     <!--New post Form -->
     <section id="post-form">
-     <h2> New Post</h2>
-     <form id="post-form" novalidate>
+      <h2> New Post</h2>
+      <form id="post-form" novalidate>
         <div>
           <label for="post-title">Title</label>
           <input type="text" id="post-title" name="title">
@@ -32,14 +32,16 @@
         </div>
 
         <button type="submit" id="submit-btn">Submit</button>
-     </form>
+      </form>
     </section>
 
     <!--Blog Post list that is dynamic -->
     <section id="post-list-section">
       <h2>All Posts</h2>
-      <div id="post-list"></div>
+      <div id="post-list">
+        <p id="empty-msg">No posts yet.</p>
+      </div>
     </section>
   </div>
-        
+
 </body>

@@ -40,7 +40,7 @@ form.addEventListener("submit", function (event) {
 // function to add/delete a post / save post in the array (newest goes first)
 
 function addPost(title, content) {
-    post.unshift({ id: Date.now(), title: title, content: content });
+    posts.unshift({ id: Date.now(), title: title, content: content });
     savePosts();
     renderPosts();
 }
@@ -61,7 +61,7 @@ function renderPosts() {
     postList.querySelectorAll(".post").forEach(function (el) { el.remove()});
 
     // show "No posts yet." only when the array is empty
-    emptyMsg.style.display = post.length === 0 ? "block" : "none";
+    emptyMsg.style.display = posts.length === 0 ? "block" : "none";
 
     posts.forEach(function (item) {
         const article = document.createElement("article");
